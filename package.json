@@ -1,0 +1,26 @@
+{
+  "name": "odin-be-forms-and-data-handling",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DebSol11/odin-BE-forms-and-data-handling.git"
+  },
+  "keywords": [],
+  "author": "example_user",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/DebSol11/odin-BE-forms-and-data-handling/issues"
+  },
+  "homepage": "https://github.com/DebSol11/odin-BE-forms-and-data-handling#readme",
+  "dependencies": {
+    "ejs": "^5.0.2",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2"
+  }
+}
