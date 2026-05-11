@@ -14,8 +14,8 @@ exports.usersCreateGet = (req, res) => {
 };
 
 exports.usersCreatePost = (req, res) => {
-  const { firstName, lastName, email } = req.body;
-  usersStorage.addUser({ firstName, lastName, email });
+  const { firstName, lastName, email, age } = req.body;
+  usersStorage.addUser({ firstName, lastName, email, age });
   res.redirect("/");
 };
 
@@ -24,17 +24,27 @@ const { body, validationResult, matchedData } = require("express-validator");
 
 const alphaErr = "must only contain letters.";
 const lengthErr = "must be between 1 and 10 characters.";
-const emailErr = "must be an email address";
+const emailErr = "must be an email address in the format `abc@hfg.xy`";
+const ageErr = "must be a number between [18 and 120]";
 
 const validateUser = [
-  body("firstName").trim()
-    .isAlpha().withMessage(`First name ${alphaErr}`)
-    .isLength({ min: 1, max: 10 }).withMessage(`First name ${lengthErr}`),
-  body("lastName").trim()
-    .isAlpha().withMessage(`Last name ${alphaErr}`)
-    .isLength({ min: 1, max: 10 }).withMessage(`Last name ${lengthErr}`),
-  body("email").trim()
-    .isEmail().withMessage(`Email ${emailErr}`)
+  body("firstName")
+    .trim()
+    .isAlpha()
+    .withMessage(`First name ${alphaErr}`)
+    .isLength({ min: 1, max: 10 })
+    .withMessage(`First name ${lengthErr}`),
+  body("lastName")
+    .trim()
+    .isAlpha()
+    .withMessage(`Last name ${alphaErr}`)
+    .isLength({ min: 1, max: 10 })
+    .withMessage(`Last name ${lengthErr}`),
+  body("email").trim().isEmail().withMessage(`Email ${emailErr}`),
+  body("age")
+    .optional({checkFalsy: true})
+    .isInt({ min: 18, max: 120 })
+    .withMessage(`Age ${ageErr}`),
 ];
 
 // We can pass an entire array of middleware validations to our controller.
@@ -48,10 +58,10 @@ exports.usersCreatePost = [
         errors: errors.array(),
       });
     }
-    const { firstName, lastName, email } = matchedData(req);
-    usersStorage.addUser({ firstName, lastName, email });
+    const { firstName, lastName, email, age } = matchedData(req);
+    usersStorage.addUser({ firstName, lastName, email, age });
     res.redirect("/");
-  }
+  },
 ];
 
 exports.usersUpdateGet = (req, res) => {
@@ -74,10 +84,10 @@ exports.usersUpdatePost = [
         errors: errors.array(),
       });
     }
-    const { firstName, lastName, email } = matchedData(req);
-    usersStorage.updateUser(req.params.id, { firstName, lastName, email });
+    const { firstName, lastName, email, age } = matchedData(req);
+    usersStorage.updateUser(req.params.id, { firstName, lastName, email, age });
     res.redirect("/");
-  }
+  },
 ];
 
 // Tell the server to delete a matching user, if any. Otherwise, respond with an error.
