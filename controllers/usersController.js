@@ -14,8 +14,8 @@ exports.usersCreateGet = (req, res) => {
 };
 
 exports.usersCreatePost = (req, res) => {
-  const { firstName, lastName, email, age } = req.body;
-  usersStorage.addUser({ firstName, lastName, email, age });
+  const { firstName, lastName, email, age, bio } = req.body;
+  usersStorage.addUser({ firstName, lastName, email, age, bio });
   res.redirect("/");
 };
 
@@ -26,6 +26,7 @@ const alphaErr = "must only contain letters.";
 const lengthErr = "must be between 1 and 10 characters.";
 const emailErr = "must be an email address in the format `abc@hfg.xy`";
 const ageErr = "must be a number between [18 and 120]";
+const bioErr = "KISS (Keep It Simple, Stupid) maximal 200 characters, please";
 
 const validateUser = [
   body("firstName")
@@ -42,9 +43,13 @@ const validateUser = [
     .withMessage(`Last name ${lengthErr}`),
   body("email").trim().isEmail().withMessage(`Email ${emailErr}`),
   body("age")
-    .optional({checkFalsy: true})
+    .optional({ checkFalsy: true })
     .isInt({ min: 18, max: 120 })
     .withMessage(`Age ${ageErr}`),
+  body("bio")
+    .optional({ checkFalsy: true })
+    .isLength({ max: 200 })
+    .withMessage(`Bio ${bioErr}`),
 ];
 
 // We can pass an entire array of middleware validations to our controller.
@@ -58,8 +63,8 @@ exports.usersCreatePost = [
         errors: errors.array(),
       });
     }
-    const { firstName, lastName, email, age } = matchedData(req);
-    usersStorage.addUser({ firstName, lastName, email, age });
+    const { firstName, lastName, email, age, bio } = matchedData(req);
+    usersStorage.addUser({ firstName, lastName, email, age, bio });
     res.redirect("/");
   },
 ];
@@ -84,8 +89,8 @@ exports.usersUpdatePost = [
         errors: errors.array(),
       });
     }
-    const { firstName, lastName, email, age } = matchedData(req);
-    usersStorage.updateUser(req.params.id, { firstName, lastName, email, age });
+    const { firstName, lastName, email, age, bio } = matchedData(req);
+    usersStorage.updateUser(req.params.id, { firstName, lastName, email, age, bio });
     res.redirect("/");
   },
 ];

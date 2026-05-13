@@ -9,8 +9,12 @@
     <% if (locals.users) {%>
       <% users.forEach(user => { %>
         <li>
-          <% if (user.age) {%>
+          <% if (user.age && user.bio) {%>
+          ID: <%= user.id %>, Name: <%= user.firstName %> <%= user.lastName %>, Email: <%= user.email %>, Age: <%= user.age %><br> Bio: <%= user.bio %></li>
+          <% } else if (user.age) {%>
           ID: <%= user.id %>, Name: <%= user.firstName %> <%= user.lastName %>, Email: <%= user.email %>, Age: <%= user.age %></li>
+          <% } else if (user.bio) {%>
+          ID: <%= user.id %>, Name: <%= user.firstName %> <%= user.lastName %>, Email: <%= user.email %><br> Bio: <%= user.bio %></li>
           <% } else {%>
           ID: <%= user.id %>, Name: <%= user.firstName %> <%= user.lastName %>, Email: <%= user.email %></li>
           <% } %>
