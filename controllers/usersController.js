@@ -90,7 +90,13 @@ exports.usersUpdatePost = [
       });
     }
     const { firstName, lastName, email, age, bio } = matchedData(req);
-    usersStorage.updateUser(req.params.id, { firstName, lastName, email, age, bio });
+    usersStorage.updateUser(req.params.id, {
+      firstName,
+      lastName,
+      email,
+      age,
+      bio,
+    });
     res.redirect("/");
   },
 ];
@@ -100,3 +106,21 @@ exports.usersDeletePost = (req, res) => {
   usersStorage.deleteUser(req.params.id);
   res.redirect("/");
 };
+
+// -------------------------------------
+// SEARCH
+
+exports.usersSearchGet = (req, res) => {
+  res.render("searchUser", {
+    title: "Search user",
+    users: usersStorage.getUsers(),
+  });
+};
+
+// search user
+// const searchUser = [
+//   query("searchName").trim().optional({ checkFalsy: true }),
+//   query("searchEmail").trim().optional({checkFalsy: true }),
+// ];
+
+// search a specific user
