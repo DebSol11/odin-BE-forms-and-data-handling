@@ -20,7 +20,7 @@ exports.usersCreatePost = (req, res) => {
 };
 
 // This just shows the new stuff we're adding to the existing contents
-const { body, validationResult, matchedData } = require("express-validator");
+const { body, query, validationResult, matchedData } = require("express-validator");
 
 const alphaErr = "must only contain letters.";
 const lengthErr = "must be between 1 and 10 characters.";
@@ -50,6 +50,18 @@ const validateUser = [
     .optional({ checkFalsy: true })
     .isLength({ max: 200 })
     .withMessage(`Bio ${bioErr}`),
+];
+
+// Assignment search implementation
+const validateUserQuery = [
+  query("firstName")
+  .trim()
+  .isAlpha()
+  .withMessage(`First name ${alphaErr}`)
+  .isLength({ min: 1, max: 10 })
+  .withMessage(`First name ${lengthErr}`)
+  .toLowerCase()
+  .optional({ checkFalsy: true }),
 ];
 
 // We can pass an entire array of middleware validations to our controller.
@@ -108,19 +120,34 @@ exports.usersDeletePost = (req, res) => {
 };
 
 // -------------------------------------
-// SEARCH
+// SEARCH Assignment
+exports.usersSearchGet = [
+  validateUserQuery,
+  (req, res) => {
+    const users = usersStorage.getUsers();
+    const errors = validationResult(req);
 
-exports.usersSearchGet = (req, res) => {
-  res.render("searchUser", {
-    title: "Search user",
-    users: usersStorage.getUsers(),
-  });
-};
+    if (!errors.isEmpty()) {
+      return res.status(400).render("index", {
+        title: "Search user",
+        errors: errors.array(),
+      });
+    }
 
-// search user
-// const searchUser = [
-//   query("searchName").trim().optional({ checkFalsy: true }),
-//   query("searchEmail").trim().optional({checkFalsy: true }),
-// ];
+    const firstName = req.query.firstName;
+    const userMatches = users.filter((user) => user.firstName === firstName);
 
-// search a specific user
+    if (userMatches.length === 0) {
+      return res.status(404).render("searchUser", {
+        title: "Search user",
+        errors: [{ msg: "Sorry, user not found :/" }],
+      });
+    }
+
+    res.render("searchUser", {
+      title: "Search user",
+      users: userMatches,
+    });
+  },
+];
+

@@ -1,16 +1,26 @@
-<!-- <!DOCTYPE html>
-<html>
+<!-- Assignment -->
+<!DOCTYPE html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
   </head>
   <body>
     <h1><%= title %></h1>
-    <form action="/search" method="GET">
-      <label for="nameSearch">Name: </label>
-      <input type="text" name="nameSearch" id="nameSearch" />
-      <label for="emailSearch">Name: </label>
-      <input type="email" name="emailSearch" id="emailSearch" />
-    </form>
+    <%- include('partials/errors.ejs') %>
+    <ul>
+        <!-- prettier ignore -->
+        <% if(locals.users) {%>
+            <p><%= users.length %> result(s) found!</p>
+            <% users.forEach((user) => {%>
+                <li>ID: <%= user.id %>, Name: <%= user.firstName %> <%= user.lastName %></li>
+                <li>Email: <%= user.email %>, Age: <%= user.age ? user.age : "N/A" %></li>
+                <li>Bio: <%= user.bio ? user.bio : "N/A" %></li>
+            <% }) %>
+        <% } %>
+
+    </ul>
     <a href="/">Back to home</a>
   </body>
-</html> -->
+</html>

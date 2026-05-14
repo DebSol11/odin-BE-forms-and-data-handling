@@ -5,7 +5,14 @@
 </head>
 <body>
   <h1><%= title %></h1>
+  <!-- Assignment -->
+    <form action="/search" method="GET">
+      <label for="firstName">Search user: </label>
+      <input type="text" name="firstName" id="firstName" required placeholder="User's first name..."/>
+      <button type="submit">Search</button>
+    </form>
   <ul>
+    <!-- prettier ignore -->
     <% if (locals.users) {%>
       <% users.forEach(user => { %>
         <li>
@@ -27,6 +34,5 @@
     <% } %>
   </ul>
   <a href="/create">Create a user</a>
-  <a href="/search">Search a user</a>
 </body>
 </html>
